@@ -11,12 +11,32 @@ datasource db {
 }
 
 model Calendars {
-  id         String    @unique @default(uuid())
+  id String @unique @default(uuid())
+
   name       String
   ownerEmail String
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  deletedAt  DateTime?
+  schedules  Schedules[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   @@map("calendars")
+}
+
+model Schedules {
+  id String @unique @default(uuid())
+
+  name      String
+  startDate DateTime
+  endDate   DateTime
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  Calendars  Calendars @relation(fields: [calendarId], references: [id])
+  calendarId String
+
+  @@map("schedules")
 }
