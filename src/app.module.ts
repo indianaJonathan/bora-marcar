@@ -1,5 +1,5 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { featureModules } from './modules/calendars';
+import { featureModules } from './modules';
 import { globalModules } from './modules/global';
 import { APP_PIPE } from '@nestjs/core';
 

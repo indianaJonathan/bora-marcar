@@ -31,14 +31,19 @@ export class CalendarsRepository {
   }
 
   create(calendar: CreateCalendarDto): CalendarDto {
-    const { name, ownerEmail } = calendar;
+    const { name, ownerId } = calendar;
     const id = randomUUID();
     const formatCalendar: CalendarDto = {
       id,
       name,
-      ownerEmail,
       createdAt: new Date(),
       updatedAt: new Date(),
+      owner: {
+        id: ownerId,
+        name: 'test',
+        email: 'test',
+        enc_pass: 'test',
+      },
     };
     this.calendars.push(formatCalendar);
     return formatCalendar;

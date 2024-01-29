@@ -1,8 +1,15 @@
+import { UserDto } from 'src/modules/users/dtos/user.dto';
+import { ScheduleDto } from '../../schedules/dtos/schedule.dto';
+
 export class CalendarDto {
-  id: string;
+  id?: string;
   name: string;
-  ownerEmail: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
+
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  deletedAt?: string | Date;
+
+  owner: UserDto;
+
+  schedules?: ScheduleDto[];
 }

@@ -8,15 +8,16 @@ import {
   NotFoundException,
   Delete,
 } from '@nestjs/common';
-import { CalendarsService } from './calendars.service';
-import { CreateCalendarDto } from './dtos/create-calendar.dto';
-import { UpdateCalendarDto } from './dtos/update-calendar.dto';
+import { UsersService } from './users.service';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
+import { UserDto } from './dtos/user.dto';
 import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Calendars')
-@Controller('calendars')
-export class CalendarsController {
-  constructor(private readonly calendarsService: CalendarsService) {}
+@ApiTags('Users')
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @ApiResponse({
     status: 200,
@@ -25,7 +26,7 @@ export class CalendarsController {
   })
   @Get()
   async findAll() {
-    return this.calendarsService.findAll();
+    return this.usersService.findAll();
   }
 
   @ApiResponse({
@@ -35,7 +36,7 @@ export class CalendarsController {
   })
   @Get('deleted')
   async findAllDeleted() {
-    return this.calendarsService.findAllDeleted();
+    return this.usersService.findAllDeleted();
   }
 
   @ApiResponse({
@@ -51,8 +52,8 @@ export class CalendarsController {
   @ApiParam({ name: 'id', type: 'UUID' })
   @Get(':id')
   async findOneById(@Param('id') id: string) {
-    const response = await this.calendarsService.findOneById(id);
-    if (!response) throw new NotFoundException('Calendar not found');
+    const response: UserDto = await this.usersService.findOneById(id);
+    if (!response) throw new NotFoundException('User not found');
     return response;
   }
 
@@ -64,13 +65,13 @@ export class CalendarsController {
   @ApiResponse({
     status: 404,
     description:
-      '{ "message": "Deleted calendar not found", "error": "Not Found", "statusCode": 404 }',
+      '{ "message": "Deleted user not found", "error": "Not Found", "statusCode": 404 }',
   })
   @ApiParam({ name: 'id', type: 'UUID' })
   @Get('deleted/:id')
   async findOneDeletedById(@Param('id') id: string) {
-    const response = await this.calendarsService.findOneDeletedById(id);
-    if (!response) throw new NotFoundException('Deleted calendar not found');
+    const response: UserDto = await this.usersService.findOneDeletedById(id);
+    if (!response) throw new NotFoundException('Deleted user not found');
     return response;
   }
 
@@ -80,8 +81,8 @@ export class CalendarsController {
       '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Post()
-  async create(@Body() calendar: CreateCalendarDto) {
-    return this.calendarsService.create(calendar);
+  async create(@Body() user: CreateUserDto) {
+    return this.usersService.create(user);
   }
 
   @ApiParam({ name: 'id', type: 'UUID' })
@@ -91,8 +92,8 @@ export class CalendarsController {
       '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() calendar: UpdateCalendarDto) {
-    return this.calendarsService.update(id, calendar);
+  async update(@Param('id') id: string, @Body() user: UpdateUserDto) {
+    return this.usersService.update(id, user);
   }
 
   @ApiParam({ name: 'id', type: 'UUID' })
@@ -102,7 +103,7 @@ export class CalendarsController {
   })
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.calendarsService.delete(id);
+    return this.usersService.delete(id);
   }
 
   @ApiParam({ name: 'id', type: 'UUID' })
@@ -113,6 +114,6 @@ export class CalendarsController {
   })
   @Patch('/restore/:id')
   async restore(@Param('id') id: string) {
-    return this.calendarsService.restore(id);
+    return this.usersService.restore(id);
   }
 }

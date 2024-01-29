@@ -4,5 +4,5 @@ export class UpdateCalendarDto {
   @ApiProperty()
   name?: string;
   @ApiProperty()
-  ownerEmail?: string;
+  ownerId?: string;
 }

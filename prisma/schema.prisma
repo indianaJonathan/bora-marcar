@@ -11,21 +11,23 @@ datasource db {
 }
 
 model Calendars {
-  id String @unique @default(uuid())
+  id String @id @unique @default(uuid())
 
-  name       String
-  ownerEmail String
-  schedules  Schedules[]
+  name      String
+  schedules Schedules[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
+  owner   Users  @relation(fields: [ownerId], references: [id])
+  ownerId String
+
   @@map("calendars")
 }
 
 model Schedules {
-  id String @unique @default(uuid())
+  id String @id @unique @default(uuid())
 
   name      String
   startDate DateTime
@@ -35,8 +37,24 @@ model Schedules {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  Calendars  Calendars @relation(fields: [calendarId], references: [id])
+  calendar   Calendars @relation(fields: [calendarId], references: [id])
   calendarId String
 
   @@map("schedules")
+}
+
+model Users {
+  id String @id @unique @default(uuid())
+
+  name     String
+  email    String
+  enc_pass String
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  calendars Calendars[]
+
+  @@map("users")
 }

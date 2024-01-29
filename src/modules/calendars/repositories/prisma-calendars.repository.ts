@@ -1,26 +1,25 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CalendarDto } from '../dtos/calendar.dto';
 import { CreateCalendarDto } from '../dtos/create-calendar.dto';
 import { UpdateCalendarDto } from '../dtos/update-calendar.dto';
-import { randomUUID } from 'node:crypto';
 import { PrismaService } from 'src/modules/global/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class CalendarsRepository {
   constructor(private readonly prismaService: PrismaService) {}
-  async findAll(): Promise<CalendarDto[]> {
+  async findAll() {
     return await this.prismaService.calendars.findMany({
       where: { deletedAt: null },
     });
   }
 
-  async findAllDeleted(): Promise<CalendarDto[]> {
+  async findAllDeleted() {
     return await this.prismaService.calendars.findMany({
       where: { deletedAt: { not: null } },
     });
   }
 
-  async findOneById(id: string): Promise<CalendarDto> {
+  async findOneById(id: string) {
     const calendar = this.prismaService.calendars.findUnique({
       where: {
         id,
@@ -33,7 +32,7 @@ export class CalendarsRepository {
     return calendar;
   }
 
-  async findOneDeletedById(id: string): Promise<CalendarDto> {
+  async findOneDeletedById(id: string) {
     const calendar = await this.prismaService.calendars.findUnique({
       where: {
         id,
@@ -46,15 +45,22 @@ export class CalendarsRepository {
     return calendar;
   }
 
-  async create(calendar: CreateCalendarDto): Promise<CalendarDto> {
-    const { name, ownerEmail } = calendar;
-    const id = randomUUID();
-    const formatCalendar: CalendarDto = {
-      id,
+  async create(calendar: CreateCalendarDto) {
+    const { name, ownerId } = calendar;
+    const owner = await this.prismaService.users.findUnique({
+      where: {
+        id: ownerId,
+        deletedAt: null,
+      },
+    });
+    if (!owner) throw new NotFoundException('Owner not found');
+    const formatCalendar: Prisma.CalendarsCreateInput = {
       name,
-      ownerEmail,
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      owner: {
+        connect: {
+          id: owner.id,
+        },
+      },
     };
 
     await this.prismaService.calendars.create({ data: formatCalendar });
@@ -62,7 +68,7 @@ export class CalendarsRepository {
     return formatCalendar;
   }
 
-  async updateById(id: string, data: UpdateCalendarDto): Promise<CalendarDto> {
+  async updateById(id: string, data: UpdateCalendarDto) {
     const calendar = this.prismaService.calendars.findUnique({
       where: {
         id,
@@ -108,7 +114,7 @@ export class CalendarsRepository {
     return 'Calendar deleted';
   }
 
-  async restoreById(id: string): Promise<CalendarDto> {
+  async restoreById(id: string) {
     const calendar = this.prismaService.calendars.findUnique({
       where: {
         id,

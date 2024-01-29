@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { CalendarsRepository } from './repositories/prisma-calendars.repository';
-import { CreateCalendarDto } from './dtos/create-calendar.dto';
-import { UpdateCalendarDto } from './dtos/update-calendar.dto';
+import { SchedulesRepository } from './repositories/prisma-schedules.repository';
+import { CreateScheduleDto } from './dtos/create-schedule.dto';
+import { UpdateScheduleDto } from './dtos/update-schedule.dto';
 
 @Injectable()
-export class CalendarsService {
-  constructor(private readonly repository: CalendarsRepository) {}
+export class SchedulesService {
+  constructor(private readonly repository: SchedulesRepository) {}
 
   async findAll() {
     return await this.repository.findAll();
@@ -23,12 +23,12 @@ export class CalendarsService {
     return await this.repository.findOneDeletedById(id);
   }
 
-  async create(calendar: CreateCalendarDto) {
-    return await this.repository.create(calendar);
+  async create(schedule: CreateScheduleDto) {
+    return await this.repository.create(schedule);
   }
 
-  async update(id: string, calendar: UpdateCalendarDto) {
-    return await this.repository.updateById(id, calendar);
+  async update(id: string, schedule: UpdateScheduleDto) {
+    return await this.repository.updateById(id, schedule);
   }
 
   async delete(id: string) {

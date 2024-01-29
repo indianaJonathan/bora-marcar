@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class CreateCalendarDto {
   @ApiProperty()
   @IsString()
   name: string;
   @ApiProperty()
-  @IsEmail()
-  ownerEmail: string;
+  @IsString()
+  ownerId: string;
 }
