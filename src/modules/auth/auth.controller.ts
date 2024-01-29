@@ -1,10 +1,18 @@
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UnauthorizedException,
+  Param,
+  BadRequestException,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dtos/auth.dto';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { ResetDto } from './dtos/reset.dto';
 
 @ApiTags('Auths')
 @Controller('authenticate')
@@ -16,11 +24,15 @@ export class AuthsController {
 
   @ApiResponse({
     status: 200,
-    description: '{ token: "EXAM-PLE", expiresAt: "2024-01-01T00:00:00" }',
+    description: '{ token: "EXAM-PLE" }',
   })
   @ApiResponse({
     status: 401,
     description: '{ code: 401, message: "Not-allowed" }',
+  })
+  @ApiResponse({
+    status: 404,
+    description: '{ code: 404, message: "User not found" }',
   })
   @Post()
   async authenticate(@Body() auth: AuthDto) {
@@ -42,5 +54,61 @@ export class AuthsController {
     });
 
     return { token };
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: '{ token: "EXAM-PLE" }',
+  })
+  @ApiResponse({
+    status: 401,
+    description: '{ code: 401, message: "Not-allowed" }',
+  })
+  @ApiResponse({
+    status: 404,
+    description: '{ code: 404, message: "User not found" }',
+  })
+  @Post('/forgot_password')
+  async forgotPass(@Body() reset: ResetDto) {
+    const user = await this.authService.forgot(reset);
+
+    const payload = {
+      email: user.email,
+      id: user.id,
+    };
+
+    const token = await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET,
+      expiresIn: 1000 * 60 * 60 * 48, // 2 days
+    });
+
+    return { token };
+  }
+
+  @ApiResponse({
+    status: 200,
+    description: 'Password updated',
+  })
+  @ApiResponse({
+    status: 401,
+    description: '{ code: 401, message: "Not-allowed" }',
+  })
+  @ApiResponse({
+    status: 404,
+    description: '{ code: 404, message: "User not found" }',
+  })
+  @Post('/reset_password/:token')
+  async resetPass(@Body() reset: ResetDto, @Param('token') token: string) {
+    const payload = await this.jwtService.decode(token);
+
+    if (!payload) throw new BadRequestException('Could not decode token');
+
+    const resetInfo = {
+      id: payload.id,
+      email: payload.email,
+      pass: reset.pass,
+    };
+
+    return this.authService.reset(resetInfo);
   }
 }
