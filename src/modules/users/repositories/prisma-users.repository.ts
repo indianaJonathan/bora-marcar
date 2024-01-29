@@ -8,20 +8,38 @@ import { UpdateUserDto } from '../dtos/update-user.dto';
 @Injectable()
 export class UsersRepository {
   constructor(private readonly prismaService: PrismaService) {}
-  async findAll(): Promise<UserDto[]> {
+  async findAll() {
     return await this.prismaService.users.findMany({
       where: { deletedAt: null },
+      select: {
+        enc_pass: false,
+        name: true,
+        email: true,
+        createdAt: true,
+        deletedAt: true,
+        id: true,
+        calendars: false,
+      },
     });
   }
 
-  async findAllDeleted(): Promise<UserDto[]> {
+  async findAllDeleted() {
     return await this.prismaService.users.findMany({
       where: { deletedAt: { not: null } },
+      select: {
+        enc_pass: false,
+        name: true,
+        email: true,
+        createdAt: true,
+        deletedAt: true,
+        id: true,
+        calendars: false,
+      },
     });
   }
 
-  async findOneById(id: string): Promise<UserDto> {
-    const user = this.prismaService.users.findUnique({
+  async findOneById(id: string) {
+    const user = await this.prismaService.users.findUnique({
       where: {
         id,
         deletedAt: null,
@@ -29,6 +47,8 @@ export class UsersRepository {
     });
 
     if (!user) throw new NotFoundException('User not found');
+
+    user['enc_pass'] = undefined;
 
     return user;
   }

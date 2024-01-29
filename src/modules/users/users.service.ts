@@ -8,15 +8,15 @@ import { UserDto } from './dtos/user.dto';
 export class UsersService {
   constructor(private readonly repository: UsersRepository) {}
 
-  async findAll(): Promise<UserDto[]> {
+  async findAll() {
     return await this.repository.findAll();
   }
 
-  async findAllDeleted(): Promise<UserDto[]> {
+  async findAllDeleted() {
     return await this.repository.findAllDeleted();
   }
 
-  async findOneById(id: string): Promise<UserDto> {
+  async findOneById(id: string) {
     return await this.repository.findOneById(id);
   }
 
