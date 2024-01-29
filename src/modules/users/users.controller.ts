@@ -32,7 +32,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description:
-      '[{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T01:00:00" }]',
+      '[{ id: "EXAM-PLE", name: "Example", email: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }]',
   })
   @Get('deleted')
   async findAllDeleted() {
@@ -42,12 +42,12 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", email: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @ApiResponse({
     status: 404,
     description:
-      '{ "message": "Calendar not found", "error": "Not Found", "statusCode": 404 }',
+      '{ "message": "User not found", "error": "Not Found", "statusCode": 404 }',
   })
   @ApiParam({ name: 'id', type: 'UUID' })
   @Get(':id')
@@ -60,7 +60,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }',
+      '{ id: "EXAM-PLE", name: "Example", email: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }',
   })
   @ApiResponse({
     status: 404,
@@ -77,8 +77,7 @@ export class UsersController {
 
   @ApiResponse({
     status: 201,
-    description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+    description: 'User created',
   })
   @Post()
   async create(@Body() user: CreateUserDto) {
@@ -89,7 +88,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", email: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() user: UpdateUserDto) {
@@ -99,7 +98,7 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'UUID' })
   @ApiResponse({
     status: 200,
-    description: 'Calendar deleted',
+    description: 'User deleted',
   })
   @Delete(':id')
   async delete(@Param('id') id: string) {
@@ -110,7 +109,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", email: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch('/restore/:id')
   async restore(@Param('id') id: string) {

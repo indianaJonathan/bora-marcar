@@ -135,4 +135,17 @@ export class CalendarsRepository {
 
     return calendar;
   }
+
+  async findCalendarsByOwnerId(ownerId: string) {
+    const calendars = await this.prismaService.calendars.findMany({
+      where: {
+        ownerId,
+      },
+    });
+
+    if (!calendars || calendars.length == 0)
+      throw new NotFoundException('No calendars found for this user');
+
+    return calendars;
+  }
 }

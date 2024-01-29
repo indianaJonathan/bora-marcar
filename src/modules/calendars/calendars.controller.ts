@@ -115,4 +115,15 @@ export class CalendarsController {
   async restore(@Param('id') id: string) {
     return this.calendarsService.restore(id);
   }
+
+  @ApiParam({ name: 'id', type: 'UUID' })
+  @ApiResponse({
+    status: 200,
+    description:
+      '[{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
+  })
+  @Get('/owner/:ownerId')
+  async findCalendarsByOwnerId(ownerId: string) {
+    return this.calendarsService.findCalendarsByOwnerId(ownerId);
+  }
 }

@@ -1,9 +1,19 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/modules/global/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
-import { UserDto } from '../dtos/user.dto';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+
+const censoredUser = {
+  id: true,
+  name: true,
+  email: true,
+  enc_pass: false,
+  createdAt: true,
+  updatedAt: true,
+  deletedAt: true,
+  calendars: false,
+};
 
 @Injectable()
 export class UsersRepository {
@@ -11,30 +21,14 @@ export class UsersRepository {
   async findAll() {
     return await this.prismaService.users.findMany({
       where: { deletedAt: null },
-      select: {
-        enc_pass: false,
-        name: true,
-        email: true,
-        createdAt: true,
-        deletedAt: true,
-        id: true,
-        calendars: false,
-      },
+      select: censoredUser,
     });
   }
 
   async findAllDeleted() {
     return await this.prismaService.users.findMany({
       where: { deletedAt: { not: null } },
-      select: {
-        enc_pass: false,
-        name: true,
-        email: true,
-        createdAt: true,
-        deletedAt: true,
-        id: true,
-        calendars: false,
-      },
+      select: censoredUser,
     });
   }
 
@@ -44,21 +38,21 @@ export class UsersRepository {
         id,
         deletedAt: null,
       },
+      select: censoredUser,
     });
 
     if (!user) throw new NotFoundException('User not found');
 
-    user['enc_pass'] = undefined;
-
     return user;
   }
 
-  async findOneDeletedById(id: string): Promise<UserDto> {
+  async findOneDeletedById(id: string) {
     const user = await this.prismaService.users.findUnique({
       where: {
         id,
         deletedAt: { not: null },
       },
+      select: censoredUser,
     });
 
     if (!user) throw new NotFoundException('Deleted user not found');
@@ -66,7 +60,7 @@ export class UsersRepository {
     return user;
   }
 
-  async create(user: CreateUserDto): Promise<UserDto> {
+  async create(user: CreateUserDto) {
     const { name, email, pass } = user;
     const formatUser: Prisma.UsersCreateInput = {
       name,
@@ -76,10 +70,10 @@ export class UsersRepository {
 
     await this.prismaService.users.create({ data: formatUser });
 
-    return formatUser;
+    return 'User created';
   }
 
-  async updateById(id: string, data: UpdateUserDto): Promise<UserDto> {
+  async updateById(id: string, data: UpdateUserDto) {
     const user = this.prismaService.users.findUnique({
       where: {
         id,
@@ -100,15 +94,23 @@ export class UsersRepository {
       data,
     });
 
-    return user;
+    const updatedUser = await this.prismaService.users.findUnique({
+      where: {
+        id,
+      },
+      select: censoredUser,
+    });
+
+    return updatedUser;
   }
 
-  async deleteById(id: string): Promise<string> {
+  async deleteById(id: string) {
     const user = this.prismaService.users.findUnique({
       where: {
         id,
         deletedAt: null,
       },
+      select: censoredUser,
     });
 
     if (!user) throw new NotFoundException('User not found');
@@ -125,12 +127,13 @@ export class UsersRepository {
     return 'User deleted';
   }
 
-  async restoreById(id: string): Promise<UserDto> {
+  async restoreById(id: string) {
     const user = this.prismaService.users.findUnique({
       where: {
         id,
         deletedAt: { not: null },
       },
+      select: censoredUser,
     });
 
     if (!user) throw new NotFoundException('Deleted user not found');

@@ -38,4 +38,8 @@ export class CalendarsService {
   async restore(id: string) {
     return await this.repository.restoreById(id);
   }
+
+  async findCalendarsByOwnerId(id: string) {
+    return await this.repository.findCalendarsByOwnerId(id);
+  }
 }
