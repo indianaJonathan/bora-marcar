@@ -21,7 +21,7 @@ export class SchedulesController {
   @ApiResponse({
     status: 200,
     description:
-      '[{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
+      '[{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
   })
   @Get()
   async findAll() {
@@ -31,7 +31,7 @@ export class SchedulesController {
   @ApiResponse({
     status: 200,
     description:
-      '[{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T01:00:00" }]',
+      '[{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }]',
   })
   @Get('deleted')
   async findAllDeleted() {
@@ -41,25 +41,25 @@ export class SchedulesController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @ApiResponse({
     status: 404,
     description:
-      '{ "message": "Calendar not found", "error": "Not Found", "statusCode": 404 }',
+      '{ "message": "Schedule not found", "error": "Not Found", "statusCode": 404 }',
   })
   @ApiParam({ name: 'id', type: 'UUID' })
   @Get(':id')
   async findOneById(@Param('id') id: string) {
     const response = await this.schedulesService.findOneById(id);
-    if (!response) throw new NotFoundException('Calendar not found');
+    if (!response) throw new NotFoundException('Schedule not found');
     return response;
   }
 
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }',
+      '{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }',
   })
   @ApiResponse({
     status: 404,
@@ -77,7 +77,7 @@ export class SchedulesController {
   @ApiResponse({
     status: 201,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Post()
   async create(@Body() schedule: CreateScheduleDto) {
@@ -88,7 +88,7 @@ export class SchedulesController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() schedule: UpdateScheduleDto) {
@@ -98,7 +98,7 @@ export class SchedulesController {
   @ApiParam({ name: 'id', type: 'UUID' })
   @ApiResponse({
     status: 200,
-    description: 'Calendar deleted',
+    description: 'Schedule deleted',
   })
   @Delete(':id')
   async delete(@Param('id') id: string) {
@@ -109,7 +109,7 @@ export class SchedulesController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", startDate: "2024-01-01T00:00:00", endDate: "2024-01-01T00:00:00", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch('/restore/:id')
   async restore(@Param('id') id: string) {

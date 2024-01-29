@@ -21,7 +21,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 200,
     description:
-      '[{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
+      '[{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
   })
   @Get()
   async findAll() {
@@ -31,7 +31,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 200,
     description:
-      '[{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T01:00:00" }]',
+      '[{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T01:00:00" }]',
   })
   @Get('deleted')
   async findAllDeleted() {
@@ -41,7 +41,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @ApiResponse({
     status: 404,
@@ -59,7 +59,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }',
+      '{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: "2024-01-01T00:00:00" }',
   })
   @ApiResponse({
     status: 404,
@@ -77,7 +77,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 201,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Post()
   async create(@Body() calendar: CreateCalendarDto) {
@@ -88,7 +88,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch(':id')
   async update(@Param('id') id: string, @Body() calendar: UpdateCalendarDto) {
@@ -109,7 +109,7 @@ export class CalendarsController {
   @ApiResponse({
     status: 200,
     description:
-      '{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
+      '{ id: "EXAM-PLE", name: "Example", ownerId: "EXAM-PLE", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }',
   })
   @Patch('/restore/:id')
   async restore(@Param('id') id: string) {

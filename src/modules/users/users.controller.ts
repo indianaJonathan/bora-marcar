@@ -22,7 +22,7 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description:
-      '[{ id: "EXAM-PLE", name: "Example", ownerEmail: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
+      '[{ id: "EXAM-PLE", name: "Example", email: "example@mail.com", createdAt: "2024-01-01T00:00:00", updatedAt: "2024-01-01T00:00:00", deletedAt: null }]',
   })
   @Get()
   async findAll() {
