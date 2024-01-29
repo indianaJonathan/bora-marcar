@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCalendarDto } from '../dtos/create-calendar.dto';
 import { UpdateCalendarDto } from '../dtos/update-calendar.dto';
-import { PrismaService } from 'src/modules/global/prisma/prisma.service';
+import { PrismaService } from '@/modules/global/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
 @Injectable()

@@ -1,8 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/modules/global/prisma/prisma.service';
+import { PrismaService } from '@/modules/global/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { UpdateUserDto } from '../dtos/update-user.dto';
+
+import * as bcrypt from 'bcrypt';
 
 const censoredUser = {
   id: true,
@@ -62,10 +64,14 @@ export class UsersRepository {
 
   async create(user: CreateUserDto) {
     const { name, email, pass } = user;
+
+    const saltRounds = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT));
+    const enc_pass = await bcrypt.hash(pass, saltRounds);
+
     const formatUser: Prisma.UsersCreateInput = {
       name,
       email,
-      enc_pass: pass,
+      enc_pass,
     };
 
     await this.prismaService.users.create({ data: formatUser });

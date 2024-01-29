@@ -1,4 +1,4 @@
-import { CalendarDto } from '../../calendars/dtos/calendar.dto';
+import { CalendarDto } from '@/modules/calendars/dtos/calendar.dto';
 
 export class ScheduleDto {
   id: string;
