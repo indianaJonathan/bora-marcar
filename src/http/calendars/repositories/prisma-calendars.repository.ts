@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCalendarDto } from '../dtos/create-calendar.dto';
 import { UpdateCalendarDto } from '../dtos/update-calendar.dto';
-import { PrismaService } from '@/modules/global/prisma/prisma.service';
+import { PrismaService } from '@/http/global/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 
 @Injectable()
@@ -25,6 +25,24 @@ export class CalendarsRepository {
         id,
         deletedAt: null,
       },
+      select: {
+        id: true,
+        name: true,
+        owner: {
+          select: {
+            id: true,
+            name: true,
+          }
+        },
+        schedules: {
+          select: {
+            id: true,
+            name: true,
+            startDate: true,
+            endDate: true,
+          }
+        }
+      }
     });
 
     if (!calendar) throw new NotFoundException('Calendar not found');

@@ -1,5 +1,5 @@
-import { UserDto } from '@/modules/users/dtos/user.dto';
-import { ScheduleDto } from '@/modules/schedules/dtos/schedule.dto';
+import { UserDto } from '@/http/users/dtos/user.dto';
+import { ScheduleDto } from '@/http/schedules/dtos/schedule.dto';
 
 export class CalendarDto {
   id?: string;

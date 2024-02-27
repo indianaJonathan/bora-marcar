@@ -1,6 +1,6 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { featureModules } from './modules';
-import { globalModules } from './modules/global';
+import { featureModules } from './http';
+import { globalModules } from './http/global';
 import { APP_PIPE } from '@nestjs/core';
 
 @Module({

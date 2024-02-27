@@ -1,6 +1,6 @@
 export class CreateScheduleDto {
   name: string;
-  startDate: string | Date;
-  endDate: string | Date;
+  startDate: Date;
+  endDate: Date;
   calendarId: string;
 }

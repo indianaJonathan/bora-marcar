@@ -1,13 +1,18 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '@/modules/global/prisma/prisma.service';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from '@/http/global/prisma/prisma.service';
 import { AuthDto } from '../dtos/auth.dto';
 import { ResetDto } from '../dtos/reset.dto';
+import { JwtService } from '@nestjs/jwt';
 
 import * as bcrypt from 'bcrypt';
+import { AuthRepository } from './auth.repository';
 
 @Injectable()
-export class AuthRepository {
-  constructor(private readonly prismaService: PrismaService) {}
+export class PrismaAuthRepository implements AuthRepository {
+  constructor(
+    private readonly prismaService: PrismaService,
+    private jwtService: JwtService
+  ) {}
 
   async authenticate(auth: AuthDto) {
     const user = await this.prismaService.users.findFirst({
@@ -17,7 +22,21 @@ export class AuthRepository {
     });
     if (!user) throw new NotFoundException('User not found');
 
-    return user;
+    const validatePass = await bcrypt.compare(auth.pass, user.enc_pass);
+
+    if (!validatePass) throw new ForbiddenException('Wrong password');
+
+    const payload = {
+      id: user.id,
+      email: user.email,
+    }
+
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: 60 * 60 * 48, // 2 days
+      secret: process.env.JWT_SECRET,
+    });
+
+    return { token };
   }
 
   async forgot(reset: ResetDto) {
@@ -29,10 +48,18 @@ export class AuthRepository {
 
     if (!user) throw new NotFoundException('User not found');
 
-    return user;
+    const payload = {
+      id: user.id,
+    }
+
+    const token = await this.jwtService.signAsync(payload, {
+      expiresIn: 60 * 60 * 24, // 1 day
+    });
+
+    return { token };
   }
 
-  async reset(reset: ResetDto) {
+  async reset(reset: ResetDto, token: string) {
     const user = await this.prismaService.users.findUnique({
       where: {
         id: reset.id,
